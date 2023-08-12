@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="This app helps FPY's to keep trak of the damage cages  AA's have done.">
-    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="https://ipulotu.github.io/damgeCageApp/images/favicon.ico">
     <title>Damage cage app</title>
 </head>
 <style>
@@ -13,7 +13,28 @@
 h1{
   margin-bottom: 0px;
 }
+/*@@@@@@@@@@@@@@@@@@@@@ header @@@@@@@@@@@@@@@@@@  */
+.appHeader{
+  display:flex;
+  justify-content: space-between;
 
+}
+
+#wikiLink{
+  justify-self: center;
+  align-self: center;
+  text-decoration: none;
+  font-family: arial, sans-serif;
+  color: white;
+  background-color: #00ab44;
+  padding: .5rem;
+  border: solid 1px black;
+  border-radius: 12px;
+}
+
+#wikiLink:hover{
+  background-color:#86ba9c;
+}
 
 
 /*@@@@@@@@@@@@@@@@@@@@@ AATable @@@@@@@@@@@@@@@@@@  */
@@ -100,42 +121,47 @@ ul {
   <div id="overlay" onclick="off()">
     <div id="overlayText"></div>
   </div>
-<h1>Damage cage app</h1>
-<hr>
-<div id="content">
-  <div class="quarters">
-    <button class="quterBnts" id="q1Bnt">Q1</button>
-    <button class="quterBnts" id="q2Bnt">Q2</button>
-    <button class="quterBnts" id="q3Bnt">Q3</button>
-    <button class="quterBnts" id="fullBnt">Full Day</button>
+  <header class="appHeader">
+    <h1>Damage cage app</h1>
+    <a id="wikiLink" href="https://ipulotu.github.io/damgeCageApp/">Wiki</a>
+  </header>
+    
   </div>
-  <div class="inputs">
-    <div>
-        <label for="">AA's info</label>  
-        <input id="getAAInput" type="text">
+  <hr>
+  <div id="content">
+    <div class="quarters">
+      <button class="quterBnts" id="q1Bnt">Q1</button>
+      <button class="quterBnts" id="q2Bnt">Q2</button>
+      <button class="quterBnts" id="q3Bnt">Q3</button>
+      <button class="quterBnts" id="fullBnt">Full Day</button>
     </div>
-    <div>
-        <label for="">Add AA</label>  
-        <input id="addAAInput" type="text">
+    <div class="inputs">
+      <div>
+          <label for="">AA's info</label>  
+          <input id="getAAInput" type="text">
+      </div>
+      <div>
+          <label for="">Add AA</label>  
+          <input id="addAAInput" type="text">
+      </div>
     </div>
-  </div>
-  <div class="contols">
-    <button id="restAABnt">Reset all Stowers</button>
-  </div>
-  <ul>
-    <li><p>Number of stowers: <span id="stowerCount"></span></p></li>
-    <li><p>Total Damages cage: <span id="dcNumber"></span></p></li>
-  </ul>
-  
+    <div class="contols">
+      <button id="restAABnt">Reset all Stowers</button>
+    </div>
+    <ul>
+      <li><p>Number of stowers: <span id="stowerCount"></span></p></li>
+      <li><p>Total Damages cage: <span id="dcNumber"></span></p></li>
+    </ul>
+    
 
-  <div class="aaTable">
-      <h2>All Associates for <span id="qNumber"></span></h2>
-  
-      <table id="AATable">
-      </table>
-  </div>
+    <div class="aaTable">
+        <h2>All Associates for <span id="qNumber"></span></h2>
+    
+        <table id="AATable">
+        </table>
+    </div>
 
-</div>
+  </div>
 
 
 </body>
