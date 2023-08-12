@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="This app helps FPY's to keep trak of the damage cages  AA's have done.">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <title>Damage cage app</title>
+</head>
+<style>
+
+h1{
+  margin-bottom: 0px;
+}
+
+
+
+/*@@@@@@@@@@@@@@@@@@@@@ AATable @@@@@@@@@@@@@@@@@@  */
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+
+/*@@@@@@@@@@@@@@@@@@@@@ overlay @@@@@@@@@@@@@@@@@@  */
+
+#overlay {
+  position: fixed; 
+  display: none; 
+  width: 100%;
+  height: 100%; 
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5); 
+  z-index: 2; 
+  cursor: pointer; 
+  align-items: center;
+  justify-items: center;
+}
+
+#overlayText{
+  background-color: white;
+  border: solid, black, 1px;
+  padding: 2rem;
+}
+
+/*@@@@@@@@@@@@@@@@@@@@@ quarters @@@@@@@@@@@@@@@@@@  */
+
+.quarters{
+  display: flex;
+}
+
+.quterBnts{
+  padding: 1px;
+}
+.quterBnts.selected{
+  padding: 1px;
+}
+
+.quarters{
+  margin: 0px 5px 5px 5px;
+}
+
+.quterBnts{
+  padding: 5px;
+  margin: 3px;
+}
+
+/*@@@@@@@@@@@@@@@@@@@@@ inputs @@@@@@@@@@@@@@@@@@  */
+
+.inputs > * {
+  margin: 3px 0px 5px 3px;
+}
+
+/*@@@@@@@@@@@@@@@@@@@@@ content @@@@@@@@@@@@@@@@@@  */
+
+ul {
+  list-style-type: none;
+}
+
+
+</style>
+
+<body>
+  <div id="overlay" onclick="off()">
+    <div id="overlayText"></div>
+  </div>
+<h1>Damage cage app</h1>
+<hr>
+<div id="content">
+  <div class="quarters">
+    <button class="quterBnts" id="q1Bnt">Q1</button>
+    <button class="quterBnts" id="q2Bnt">Q2</button>
+    <button class="quterBnts" id="q3Bnt">Q3</button>
+    <button class="quterBnts" id="fullBnt">Full Day</button>
+  </div>
+  <div class="inputs">
+    <div>
+        <label for="">AA's info</label>  
+        <input id="getAAInput" type="text">
+    </div>
+    <div>
+        <label for="">Add AA</label>  
+        <input id="addAAInput" type="text">
+    </div>
+  </div>
+  <div class="contols">
+    <button id="restAABnt">Reset all Stowers</button>
+  </div>
+  <ul>
+    <li><p>Number of stowers: <span id="stowerCount"></span></p></li>
+    <li><p>Total Damages cage: <span id="dcNumber"></span></p></li>
+  </ul>
+  
+
+  <div class="aaTable">
+      <h2>All Associates for <span id="qNumber"></span></h2>
+  
+      <table id="AATable">
+      </table>
+  </div>
+
+</div>
+
+
+</body>
+<script type="text/javascript">
+//@@@@@@@@@@@@@@@ Variables @@@@@@@@@@@@@@@@@@@@@@@@@
+let stowers = [{"id":'46',"damageCages": 1,"goodCages": 0},{"id":'45',"damageCages": 1,"goodCages": 0}];
+const AATable = document.getElementById("AATable");
+let quarter = "q1"
+const stowerCount = document.getElementById("stowerCount"); 
+const qNumber = document.getElementById("qNumber"); 
+const dcNumber = document.getElementById("dcNumber"); 
+
+
+
+//@@@@@@@@@@@@@@@ Event Listeners @@@@@@@@@@@@@@@@@@@@@@@
+let addAAinput = document.getElementById('addAAInput');
+addAAinput.addEventListener('keyup', function onEvent(e) {
+    if (e.keyCode === 13) {
+      let id = addAAInput.value.trim();
+      if(id == ""){
+          alert("Invalid Login")
+          return
+      }
+      let userAnswer = confirm("Is this AA stowing a damage cage?");
+      if (userAnswer){
+        addAAInput = document.querySelector('#addAAInput');
+        
+        
+        addAAInput.value = '';
+        let isPresnt;
+        if(stowers.length)
+          isPresnt = stowers.find(x => x.id === id)
+      
+        if(isPresnt == undefined){
+          addAA(id)
+        }else{
+          isPresnt.damageCages += 1;
+          sortArray(stowers, "damageCages")
+          writeToLS(quarter, stowers)
+          resetContent();
+        }
+      } 
+      addAAInput.value = '';
+    }
+});
+
+let getAAInput = document.getElementById('getAAInput');
+getAAInput.addEventListener('keyup', function onEvent(e) {
+    if (e.keyCode === 13) {
+      let id = getAAInput.value.trim();
+      if(id == ""){
+          alert("Invalid Login")
+          return
+      }
+      getAAInput = document.querySelector('#getAAInput');
+      
+      getAAInput.value = '';
+      let isPresnt = stowers.find(x => x.id === id)
+      if(isPresnt == undefined){
+        alert("AA has not stowed a damage cage");
+      }else{
+        displayAA(isPresnt);
+      }
+      
+    }
+});
+
+const restAABnt = document.getElementById("restAABnt");
+restAABnt.addEventListener("click", restAA);
+
+let q1Bnt = document.getElementById('q1Bnt');
+q1Bnt.addEventListener('click', function onEvent(e) {
+  let selected = q1Bnt.classList.contains("selected");
+  if (selected){
+    return
+  }
+  quarter = "q1";
+  resetContent()
+});
+
+let q2Bnt = document.getElementById('q2Bnt');
+q2Bnt.addEventListener('click', function onEvent(e) {
+  let selected = q2Bnt.classList.contains("selected");
+  if (selected){
+    return
+  }
+  quarter = "q2";
+  resetContent()
+});
+
+let q3Bnt = document.getElementById('q3Bnt');
+q3Bnt.addEventListener('click', function onEvent(e) {
+  let selected = q3Bnt.classList.contains("selected");
+  if (selected){
+    return 
+  }
+  quarter = "q3";
+  resetContent()
+});
+
+let fullBnt = document.getElementById('fullBnt');
+fullBnt.addEventListener('click', function onEvent(e) {
+  quarter = "fullDay";
+  resetContent()
+});
+
+//@@@@@@@@@@@@@@@@ Modle functions @@@@@@@@@@@@@@@@@@@
+
+function addAA(id) {
+    let aa = {
+        "id":id,
+        "damageCages": 1,
+        "goodCages": 0,
+    }
+    stowers.push(aa);
+    sortArray(stowers, "damageCages")
+    writeToLS(quarter, stowers);
+    resetContent();
+
+}
+
+//@@@@@@@@@@@@@@@@ Utilities @@@@@@@@@@@@@@@@@@@
+
+function sortArray(arr,prop){
+  arr.sort((a,b)=>{
+    if(typeof a[prop] ==='string')
+      return b[prop].localeCompare(a[prop]);
+    return b[prop] - a[prop];
+  });
+}
+
+function getMixArray(){
+  let q1 = readFromLS("q1");
+  let q2 = readFromLS("q2");
+  let q3 = readFromLS("q3");
+  if(q1 == false && q2 == false  && q3 == false){
+    return false
+  }
+  let fullDay;
+  if(q1 == false){
+    fullDay = [];
+  } else {
+    fullDay = q1;
+  }
+
+  if(q2 != false)
+  {
+    q2.forEach((stower)=>{
+      let isPresnt = fullDay.find(x => x.id === stower.id)
+      if(isPresnt != undefined){
+        isPresnt.damageCages += stower.damageCages;
+      } else {
+        fullDay.push(stower);
+      }
+    })
+  } 
+  if(q3 != false)
+  {
+    q3.forEach((stower)=>{
+      let isPresnt = fullDay.find(x => x.id === stower.id)
+      if(isPresnt != undefined){
+        isPresnt.damageCages += stower.damageCages;
+      } else {
+        fullDay.push(stower);
+      }
+    })
+  }
+  sortArray(fullDay, "damageCages")
+  return fullDay;
+
+}
+
+function countDamges(stowers){
+  let totalCages = 0;
+  stowers.forEach(function(stower) {
+    totalCages += stower.damageCages;
+  })
+  return totalCages;
+}
+
+function clearElement(element){
+    while (element.firstChild) {
+        element.firstChild.remove()
+    }
+}  
+
+//@@@@@@@@@@@@@@@@@@@@ View @@@@@@@@@@@@@@@@@@@@@@@
+
+function resetContent(){
+  clearElement(AATable)
+  if(quarter == "fullDay"){
+    stowers = getMixArray();
+    addAAInput.disabled = true;
+  } else  {
+    stowers = readFromLS(quarter);
+    addAAInput.disabled = false;
+  }
+
+
+  //Getting count of stowers 
+  let count; 
+  if (stowers == false || stowers == undefined){
+    stowers = [];
+    count = 0; 
+  } else {
+    count = stowers.length
+  }
+  stowerCount.innerText = count;
+  qNumber.innerText = quarter.toUpperCase();
+
+  //Getting count of cages
+  dcNumber.innerText = countDamges(stowers);
+    
+  let tr1 = document.createElement('tr');
+  let th1 = document.createElement('th');
+  let th2 = document.createElement('th');
+  //let th3 = document.createElement('th');
+  
+  th1.textContent = "AA's id";
+  th2.textContent = "Damage cages";
+  //th3.textContent = "Good cages";
+
+  tr1.appendChild(th1);
+  tr1.appendChild(th2);
+  //tr1.appendChild(th3);
+
+  AATable.appendChild(tr1);
+
+  if(stowers.length){
+    stowers.forEach((stower)=>{
+      let tr1 = document.createElement('tr');
+      let th1 = document.createElement('th');
+      let th2 = document.createElement('th');
+      //let th3 = document.createElement('th');
+      th1.textContent = stower.id;
+      th2.textContent = stower.damageCages;
+      //th3.textContent = stower.goodCages;
+
+      tr1.appendChild(th1);
+      tr1.appendChild(th2);
+      //tr1.appendChild(th3);
+
+      AATable.appendChild(tr1);
+    })
+  }
+}
+
+function displayAA(aa) {
+  let text = document.getElementById("overlayText");
+  let h2 = document.createElement("h2");
+  let ul = document.createElement("ul");
+  let li1 = document.createElement("li");
+  let li2 = document.createElement("li");
+
+  h2.textContent = `AA: ${aa.id}`;
+  li1.textContent = `Damage stowed: ${aa.damageCages}`;
+  //li2.textContent = `Sellable stowed: ${aa.goodCages}`;
+
+  ul.appendChild(li1);
+  //ul.appendChild(li2);
+
+  text.appendChild(h2);
+  text.appendChild(ul);
+  document.getElementById("overlay").style.display = "grid";
+  document.getElementById("getAAInput").disabled = true;
+}
+
+function off() {
+  document.getElementById("overlay").style.display = "none";
+  let AAText = document.getElementById("overlayText");
+  clearElement(AAText);
+  document.getElementById("getAAInput").disabled = false;
+}
+
+function restAA(){
+  let answer;
+  if(quarter == "fullDay"){
+    //alert("You must reset each quarter individually.")
+    answer = confirm("Are you sure you wan to reset all AA data for the full day?")
+    if (answer){
+      clearLS("q1");
+      clearLS("q2");
+      clearLS("q3");
+      resetContent();
+    }
+    
+  } else{
+    answer = confirm("Are you sure you wan to reset all AA data?")
+    if (answer){
+      clearLS(quarter);
+      resetContent();
+    }
+  }
+  
+  
+}
+
+//@@@@@@@@@@@@@@@ Local Stoage @@@@@@@@@@@@@@@
+
+function readFromLS(key) { 
+    let data = localStorage.getItem(key);
+    if (data !== null)
+        return JSON.parse(localStorage.getItem(key));
+    else 
+        return false;
+        
+}
+
+function writeToLS(key, data) { 
+    data = JSON.stringify(data);
+    localStorage.setItem(key, data);
+}
+
+function clearLS(key) { 
+    window.localStorage.removeItem(key); 
+}
+
+// @@@@@@@@@@@@@@@ Start Code @@@@@@@@@@@@@@@@@
+
+resetContent()
+
+</script>
+</html>
