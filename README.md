@@ -6,6 +6,8 @@ It always feels like you are juggling a hundred things as FPY and dealing with u
 
 You can check out a live version of the app: [here](https://ipulotu.github.io/Damage_Cage_App/DamageCages.html)
 
+If you have any suggestions for features or if you found any bugs feel free to reach out me at: ikaika.Pulotu@gmail.com 
+
 ## Work flow
 
 <summary>Adding AA's</summary>
@@ -22,18 +24,11 @@ You can check out a live version of the app: [here](https://ipulotu.github.io/Da
 2. Scan AA's bage into the "AA's info" input bar
 3. A popup should display if the AA has stowed a damage cage or not
 
-<details>
-<summary>Links</summary>
+### Links & Resources 
 
-* Live version: [Link](https://ipulotu.github.io/Damage_Cage_App/DamageCages.html)
-* GitHub repository: [Link](https://github.com/Ipulotu/Damage_Cage_App)
+* Live version: [Here](https://ipulotu.github.io/Damage_Cage_App/DamageCages.html)
+* GitHub repository: [Here](https://github.com/Ipulotu/Damage_Cage_App)
+* Stackoverflow.com: [Here](https://stackoverflow.com/)
+* W3schools.com: [Here](https://www.w3schools.com/)
 
-</details>
 
-<details>
-<summary>Resources used</summary>
-
-* [Stackoverflow.com](https://stackoverflow.com/)
-* [w3schools.com](https://www.w3schools.com/)
-
-</details>
