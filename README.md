@@ -6,7 +6,12 @@ It always feels like you are juggling a hundred things as FPY and dealing with u
 
 You can check out a live version of the app: [here](https://ipulotu.github.io/Damage_Cage_App/DamageCages.html)
 
-If you have any suggestions for features or if you found any bugs feel free to reach out me at: ikaika.Pulotu@gmail.com 
+Download the file: [here](https://github.com/Ipulotu/Damage_Cage_App/blob/main/DamageCages.html)
+
+
+If you have any suggestions for features or if you found any bugs feel free to reach out me at: ikaika.Pulotu@gmail.com
+
+
 
 ## Work flow
 
