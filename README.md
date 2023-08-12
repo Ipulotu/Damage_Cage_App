@@ -6,7 +6,7 @@ This app helps FPY's to keep trak of the damage cages AA's have done.
 
 It always feels like you are juggling a hundred things as FPY and dealing with upset stowers doesn’t make it easier. So, to help keep your AA accountable and to make sure each of them are doing their fair share of damage cages I made this app.
 
-You can check out a live version of the app: [ere](https://ipulotu.github.io/damgeCageApp/DamageCages.html)
+You can check out a live version of the app: [here](https://ipulotu.github.io/Damage_Cage_App/DamageCages.html)
 
 ## Work flow
 
@@ -27,8 +27,8 @@ You can check out a live version of the app: [ere](https://ipulotu.github.io/dam
 <details>
 <summary>Links</summary>
 
-* Live version: [Link](https://ipulotu.github.io/damgeCageApp/DamageCages.html)
-* GitHub repository: [Link](https://github.com/Ipulotu/damgeCageApp)
+* Live version: [Link](https://ipulotu.github.io/Damage_Cage_App/DamageCages.html)
+* GitHub repository: [Link](https://github.com/Ipulotu/Damage_Cage_App)
 
 </details>
 
